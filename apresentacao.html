@@ -1,0 +1,1590 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#ff98c9">
+<title>João Gouvea — Apresentação Pessoal (DOH! Design System)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..800;1,9..40,400..800&family=Lilita+One&display=swap" rel="stylesheet">
+<style>
+/* ===== TOKENS & BASE DO DESIGN SYSTEM (DOH!) ===== */
+:root {
+  --pink: #ff98c9;
+  --hot: #ed3888;
+  --yellow: #ffdf49;
+  --green: #173c31;
+  --blue: #96c6ff;
+  --cream: #fffaf0;
+  --ink: #173c31;
+  --font: 'DM Sans', Arial, sans-serif;
+  --display: 'Lilita One', 'Arial Rounded MT Bold', sans-serif;
+  --ease: cubic-bezier(.22, .75, .18, 1);
+  --px-ease: cubic-bezier(.22, 1, .36, 1);
+  --px-spring: cubic-bezier(.34, 1.56, .64, 1);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+body {
+  margin: 0;
+  background: var(--pink);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+::selection { background: var(--yellow); color: var(--ink); }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; cursor: pointer; border: 0; background: none; }
+h1, h2, h3, p { margin-top: 0; }
+em { font-style: normal; font-family: var(--display); font-weight: 400; }
+
+/* ===== HEADER DO DESIGN SYSTEM (3 ZONAS + PÍLULA FROSTED) ===== */
+#header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 88px;
+  padding: 0 4.5%;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 24px;
+  z-index: 60;
+  transition: height .35s var(--ease), background .3s, box-shadow .3s, border-color .3s;
+  border-bottom: 1px solid transparent;
+}
+#header.solid {
+  height: 74px;
+  background: rgba(255, 250, 240, 0.9);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom-color: rgba(23, 60, 49, 0.14);
+}
+#header .brand {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 14px;
+  justify-self: start;
+}
+#header .brand strong {
+  font-family: var(--display);
+  font-size: 44px;
+  line-height: .9;
+  letter-spacing: -1.5px;
+  color: var(--green);
+  transform: rotate(-5deg);
+  transition: transform .4s var(--px-spring);
+}
+#header .brand:hover strong {
+  transform: rotate(3deg) scale(1.05);
+}
+#header .brand span {
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1.35;
+  letter-spacing: .14em;
+  padding-left: 14px;
+  border-left: 1.5px solid rgba(23, 60, 49, .28);
+}
+#header nav {
+  display: flex;
+  gap: 4px;
+  padding: 5px;
+  border-radius: 999px;
+  background: rgba(255, 250, 240, .6);
+  border: 1px solid rgba(23, 60, 49, .12);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 10px 30px -18px rgba(23, 60, 49, .45);
+  font-size: 14px;
+  font-weight: 700;
+}
+#header.solid nav {
+  background: rgba(23, 60, 49, .06);
+  box-shadow: none;
+}
+#header nav a {
+  padding: 10px 18px;
+  border-radius: 999px;
+  line-height: 1;
+  transition: background .25s, color .25s;
+}
+#header nav a:hover {
+  background: rgba(255, 250, 240, .95);
+}
+#header nav a[aria-current="true"] {
+  background: var(--ink);
+  color: var(--cream);
+}
+#header .header-actions {
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ===== BOTÃO PÍLULA COM CALDA DERRETENDO (GLAZE BUTTON) ===== */
+.button {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: 7px 7px 7px 24px;
+  min-height: 54px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--green);
+  color: var(--cream);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -.01em;
+  box-shadow: 0 14px 30px -18px rgba(23, 60, 49, .7);
+  transition: transform .45s cubic-bezier(.2, .9, .25, 1.25), box-shadow .35s, color .3s .08s;
+}
+.button::before {
+  content: "";
+  position: absolute;
+  left: -2px;
+  right: -2px;
+  top: 0;
+  height: calc(100% + 24px);
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(180deg, #ff6fae, #ec4f8e);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, .45);
+  -webkit-mask: linear-gradient(#000, #000) top/100% calc(100% - 23px) no-repeat,
+    url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAxMjAgMjQnPjxwYXRoIGQ9J00wIDBoMTIwdjVjLTYgMC03IDEyLTEyIDEycy01LTktMTAtOS02IDQtMTEgNC01LTctMTEtNy02IDE5LTEyIDE5LTYtMTUtMTEtMTUtNiA1LTExIDUtNi04LTExLTgtNiAxMy0xMSAxM1M4IDUgMCA1eicvPjwvc3ZnPg==") left bottom/120px 24px repeat-x;
+  mask: linear-gradient(#000, #000) top/100% calc(100% - 23px) no-repeat,
+    url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAxMjAgMjQnPjxwYXRoIGQ9J00wIDBoMTIwdjVjLTYgMC03IDEyLTEyIDEycy01LTktMTAtOS02IDQtMTEgNC01LTctMTEtNy02IDE5LTEyIDE5LTYtMTUtMTEtMTUtNiA1LTExIDUtNi04LTExLTgtNiAxMy0xMSAxM1M4IDUgMCA1eicvPjwvc3ZnPg==") left bottom/120px 24px repeat-x;
+  transform: translateY(calc(-100% - 2px));
+  transition: transform .6s cubic-bezier(.65, 0, .2, 1);
+}
+.button::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(-8px) scale(.9);
+  background: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAxNTAgMTQnPjxnIHN0cm9rZS1saW5lY2FwPSdyb3VuZCcgc3Ryb2tlLXdpZHRoPScyLjYnPjxwYXRoIGQ9J00xMCA1bDYgMicgc3Ryb2tlPScjZmZmNmQ2Jy8+PHBhdGggZD0nTTMzIDEwbDMtNScgc3Ryb2tlPScjM2Q4Y2ZmJy8+PHBhdGggZD0nTTU3IDRsNiAyJyBzdHJva2U9JyNmZmQyM2YnLz48cGF0aCBkPSdNODAgMTBsNS0zJyBzdHJva2U9JyMzNGMyN2EnLz48cGF0aCBkPSdNMTAyIDRsMiA2JyBzdHJva2U9JyNiNDhjZmYnLz48cGF0aCBkPSdNMTI2IDlsNi0yJyBzdHJva2U9JyNmZmIwM2EnLz48L2c+PC9zdmc+") 12px 2px/150px 14px repeat-x;
+  transition: opacity .25s, transform .45s cubic-bezier(.2, .9, .25, 1.4);
+}
+.button:hover, .button:focus-visible {
+  color: #fff7ef;
+  transform: translateY(-3px) rotate(-1.2deg);
+  box-shadow: 0 0 0 2px var(--ink), 0 22px 34px -18px rgba(150, 20, 80, .75);
+}
+.button:hover::before, .button:focus-visible::before { transform: translateY(-17px); }
+.button:hover::after, .button:focus-visible::after { opacity: 1; transform: none; transition-delay: .28s, .28s; }
+.button .arw {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--cream);
+  color: var(--ink);
+  overflow: hidden;
+  transition: background .3s, color .3s;
+}
+.button .arw svg {
+  grid-area: 1/1;
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform .5s var(--ease);
+}
+.button .arw svg + svg { transform: translate(-160%, 160%); }
+.button:hover .arw svg:first-child { transform: translate(160%, -160%); }
+.button:hover .arw svg + svg { transform: none; }
+.button:hover .arw { background: #fff7ef; color: #ec4f8e; }
+.header-button {
+  min-height: 46px;
+  padding: 5px 5px 5px 18px;
+  font-size: 13.5px;
+  gap: 12px;
+}
+.header-button .arw { width: 36px; height: 36px; }
+.glaze-pop {
+  position: fixed;
+  z-index: 9999;
+  width: 9px;
+  height: 3.5px;
+  border-radius: 3px;
+  pointer-events: none;
+}
+
+.eyebrow {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  margin: 0 0 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.eyebrow i {
+  height: 9px;
+  width: 9px;
+  border-radius: 50%;
+  background: var(--ink);
+  box-shadow: 0 0 0 5px rgba(23, 60, 49, .14);
+}
+
+/* ===== 1. HERO STAGE (CAPA DA APRESENTAÇÃO) ===== */
+.hero-stage {
+  position: relative;
+  min-height: 100svh;
+  padding: 120px 5% 70px;
+  display: grid;
+  grid-template-columns: 1.08fr .92fr;
+  align-items: center;
+  gap: clamp(32px, 5vw, 72px);
+  overflow: hidden;
+  background: var(--pink);
+}
+#hero-sprinkles {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+.hero-copy {
+  position: relative;
+  z-index: 3;
+}
+.hero-copy h1 {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(64px, 9.2vw, 146px);
+  line-height: .86;
+  letter-spacing: -.02em;
+  color: var(--cream);
+  text-shadow: .032em .042em 0 var(--ink);
+  margin: 0 0 26px;
+  transform: rotate(-2.5deg);
+  transform-origin: left center;
+}
+.hero-copy h1 em {
+  color: var(--yellow);
+  text-shadow: .032em .042em 0 var(--ink);
+}
+.hero-copy .description {
+  font-size: clamp(16px, 1.25vw, 19px);
+  line-height: 1.6;
+  max-width: 520px;
+  margin: 0 0 32px;
+}
+.hero-copy .description b {
+  display: block;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(24px, 2.2vw, 32px);
+  line-height: 1.15;
+  margin-bottom: 10px;
+  color: var(--ink);
+}
+.hero-ctas {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.hero-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 54px;
+  padding: 0 24px;
+  border-radius: 999px;
+  border: 2px solid var(--ink);
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 15px;
+  background: rgba(255, 250, 240, .4);
+  backdrop-filter: blur(8px);
+  transition: background .3s, transform .35s var(--px-spring);
+}
+.hero-ghost:hover {
+  background: var(--cream);
+  transform: translateY(-3px);
+}
+
+/* Moldura da Foto do João no Hero + Halo + Stamp Giratório */
+.hero-visual {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+}
+.hero-halo {
+  position: absolute;
+  width: 120%;
+  height: 120%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255, 242, 248, .95), rgba(255, 222, 238, .65) 48%, rgba(255, 214, 234, 0) 74%);
+  pointer-events: none;
+  z-index: 0;
+}
+.portrait-card {
+  position: relative;
+  z-index: 2;
+  width: min(420px, 86vw);
+  aspect-ratio: .82;
+  background: var(--cream);
+  border: 3px solid var(--ink);
+  border-radius: 210px 210px 32px 32px;
+  overflow: hidden;
+  box-shadow: 12px 14px 0 var(--ink), 0 36px 70px -30px rgba(23, 60, 49, .55);
+  transform: rotate(2deg);
+  transition: transform .5s var(--px-spring), box-shadow .5s;
+}
+.portrait-card:hover {
+  transform: rotate(0deg) scale(1.02);
+  box-shadow: 16px 18px 0 var(--ink), 0 42px 80px -28px rgba(23, 60, 49, .65);
+}
+.portrait-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 18%;
+  display: block;
+}
+.portrait-badge {
+  position: absolute;
+  left: 18px;
+  bottom: 18px;
+  background: var(--cream);
+  border: 2px solid var(--ink);
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-family: var(--display);
+  font-size: 20px;
+  color: var(--ink);
+  transform: rotate(-4deg);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+.happy-stamp {
+  position: absolute;
+  right: max(-10px, 2%);
+  top: -22px;
+  width: 136px;
+  height: 136px;
+  border-radius: 50%;
+  transform: rotate(-8deg);
+  display: grid;
+  place-items: center;
+  z-index: 4;
+  filter: drop-shadow(0 14px 18px rgba(23, 60, 49, .22));
+}
+.happy-stamp svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.happy-stamp circle {
+  fill: var(--yellow);
+  stroke: var(--ink);
+  stroke-width: 2;
+}
+.happy-stamp .ring-text {
+  transform-origin: 70px 70px;
+  animation: hero-stamp 24s linear infinite;
+}
+.happy-stamp text {
+  font: 800 10.8px var(--font);
+  fill: var(--ink);
+  letter-spacing: 1.2px;
+}
+.happy-stamp b {
+  position: relative;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 34px;
+  line-height: 1;
+  color: var(--ink);
+}
+@keyframes hero-stamp { to { transform: rotate(360deg); } }
+
+/* ===== CONTAINER DE CONTEÚDO COM BORDAS ARREDONDADAS DO DESIGN SYSTEM ===== */
+.content {
+  position: relative;
+  z-index: 10;
+  background: var(--cream);
+  border-radius: 44px 44px 0 0;
+  margin-top: -32px;
+  overflow: hidden;
+}
+
+/* ===== 2. FAIXAS CRUZADAS ANIMADAS (CROSSING RIBBONS) ===== */
+.ribbons {
+  position: relative;
+  height: 210px;
+  overflow: hidden;
+  background: var(--cream);
+  display: grid;
+  place-items: center;
+}
+.ticker {
+  overflow: hidden;
+  background: var(--green);
+  color: var(--yellow);
+  padding: 18px 0;
+  border-block: 2px solid var(--ink);
+  position: absolute;
+  left: -5%;
+  right: -5%;
+}
+.ticker:first-child {
+  top: 38px;
+  transform: rotate(-2.8deg);
+  z-index: 2;
+  box-shadow: 0 12px 30px -16px rgba(23, 60, 49, .6);
+}
+.ticker.ticker-b {
+  top: 82px;
+  transform: rotate(2.4deg);
+  background: var(--pink);
+  color: var(--ink);
+}
+.ticker > div {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  width: max-content;
+  animation: ticker 28s linear infinite;
+}
+.ticker.ticker-b > div {
+  animation-direction: reverse;
+  animation-duration: 34s;
+}
+.ticker span {
+  font-family: var(--display);
+  font-size: 30px;
+  white-space: nowrap;
+}
+.ticker b {
+  font-size: 36px;
+  line-height: 1;
+  font-weight: 400;
+}
+.ticker.ticker-b b { color: var(--hot); }
+@keyframes ticker { to { transform: translateX(-50%); } }
+
+/* ===== SEÇÕES PADRÃO DO DESIGN SYSTEM ===== */
+.section {
+  padding: 96px 6.5%;
+  position: relative;
+}
+.section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 40px;
+  margin-bottom: 48px;
+}
+.section-heading h2 {
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: clamp(44px, 5.5vw, 86px);
+  line-height: .96;
+  letter-spacing: -.055em;
+  margin: 0;
+}
+.section-heading h2 em {
+  font-family: var(--display);
+  font-weight: 400;
+  letter-spacing: -.02em;
+}
+.section-heading > p {
+  font-size: 16px;
+  line-height: 1.7;
+  max-width: 390px;
+  margin-bottom: 4px;
+}
+
+/* ===== 3. MANIFESTO ("SOBRE MIM" COM PALAVRAS QUE ACENDEM NO SCROLL) ===== */
+.manifesto {
+  display: grid;
+  grid-template-columns: 1fr 1.25fr;
+  gap: 8%;
+  background: var(--yellow);
+  border-radius: 44px 44px 0 0;
+  border-top: 2px solid var(--ink);
+}
+.manifesto h2 {
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: clamp(48px, 6.2vw, 94px);
+  line-height: .96;
+  letter-spacing: -.055em;
+  margin: 0 0 28px;
+}
+.manifesto h2 em { color: var(--hot); }
+.round-note {
+  font-family: var(--display);
+  font-size: 19px;
+  text-align: center;
+  width: 144px;
+  height: 144px;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  background: var(--pink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+  box-shadow: 5px 5px 0 var(--ink);
+  animation: px-spin 16s linear infinite;
+}
+@keyframes px-spin { to { transform: rotate(360deg); } }
+.manifesto-right .lead {
+  font-size: clamp(21px, 2vw, 26px);
+  font-weight: 700;
+  line-height: 1.38;
+  margin-bottom: 22px;
+}
+.manifesto-right p:not(.eyebrow):not(.lead) {
+  font-size: 17.5px;
+  line-height: 1.75;
+  margin-bottom: 20px;
+}
+.manifesto .px-f {
+  color: rgba(23, 60, 49, .25);
+  transition: color .35s;
+}
+.manifesto .px-f.on {
+  color: var(--ink);
+}
+.manifesto-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 26px;
+}
+.manifesto-pills span {
+  background: var(--cream);
+  border: 1.5px solid var(--ink);
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 13px;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+/* ===== 4. PILARES DA TRAJETÓRIA (CARTÕES EMPILHÁVEIS STICKY) ===== */
+.method-section {
+  background: var(--blue);
+  border-radius: 44px 44px 0 0;
+  margin-top: -36px;
+  border-top: 2px solid var(--ink);
+}
+.method-section h2 em {
+  color: var(--cream);
+  text-shadow: .03em .04em 0 var(--ink);
+}
+.method {
+  display: block;
+}
+.method article {
+  position: sticky;
+  top: calc(104px + var(--k, 0) * 24px);
+  background: var(--cream);
+  border: 2px solid var(--ink);
+  border-radius: 32px;
+  padding: clamp(28px, 4vw, 48px);
+  margin: 0 auto 28px;
+  max-width: 1020px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: clamp(24px, 4vw, 56px);
+  align-items: center;
+  box-shadow: 0 30px 60px -38px rgba(23, 60, 49, .55), 8px 8px 0 var(--ink);
+}
+.method article .number {
+  font-family: var(--display);
+  font-size: clamp(84px, 11vw, 156px);
+  line-height: .82;
+  color: var(--blue);
+  -webkit-text-stroke: 2.5px var(--ink);
+  letter-spacing: -.05em;
+  user-select: none;
+}
+.method article h3 {
+  font-family: var(--display);
+  font-size: clamp(28px, 3vw, 42px);
+  margin: 0 0 12px;
+  line-height: 1.05;
+}
+.method article p {
+  font-size: 16.5px;
+  line-height: 1.7;
+  margin: 0 0 18px;
+  max-width: 640px;
+}
+.method article strong {
+  display: inline-block;
+  background: var(--yellow);
+  border: 1.5px solid var(--ink);
+  padding: 8px 16px;
+  border-radius: 99px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+/* ===== 5. VITRINE INTERATIVA DE INTERESSES (FLAVOUR ROOM ADAPTADA) ===== */
+.showcase-section {
+  background: var(--cream);
+  border-radius: 44px 44px 0 0;
+  margin-top: -36px;
+  border-top: 2px solid var(--ink);
+}
+.showcase-section h2 em { color: var(--hot); }
+.flavour-room {
+  display: grid;
+  grid-template-columns: .95fr 1.05fr;
+  border-radius: 32px;
+  border: 2px solid var(--ink);
+  background: var(--cream);
+  overflow: hidden;
+  box-shadow: 10px 12px 0 var(--ink);
+  min-height: 480px;
+}
+.room-stage {
+  background: var(--flavour, #ffc2df);
+  padding: 36px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  border-right: 2px solid var(--ink);
+  transition: background .45s var(--ease);
+}
+.room-stage-icon {
+  width: min(240px, 55vw);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--cream);
+  border: 2.5px solid var(--ink);
+  box-shadow: 8px 8px 0 var(--ink);
+  display: grid;
+  place-items: center;
+  font-size: 88px;
+  margin: auto 0;
+  transition: transform .5s var(--px-spring);
+}
+.room-stage:hover .room-stage-icon {
+  transform: rotate(-6deg) scale(1.06);
+}
+.room-stage-tag {
+  align-self: flex-start;
+  background: var(--cream);
+  border: 1.5px solid var(--ink);
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .12em;
+}
+.room-editorial {
+  padding: clamp(28px, 3.5vw, 48px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.room-selector {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+.room-selector button {
+  display: grid;
+  grid-template-columns: 38px 1fr auto;
+  align-items: center;
+  text-align: left;
+  padding: 12px 16px;
+  border-radius: 16px;
+  border: 1.5px solid rgba(23, 60, 49, .15);
+  font-weight: 700;
+  font-size: 17px;
+  transition: background .3s, transform .3s var(--px-spring), border-color .3s;
+}
+.room-selector button:hover {
+  background: rgba(23, 60, 49, .05);
+  transform: translateX(4px);
+}
+.room-selector button[aria-pressed="true"] {
+  background: var(--flavour, #ffc2df);
+  border-color: var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+.room-selector .taste-number {
+  font-family: var(--display);
+  font-size: 20px;
+}
+.room-story h3 {
+  font-family: var(--display);
+  font-size: clamp(30px, 3.2vw, 44px);
+  margin: 8px 0 12px;
+}
+.room-story p {
+  font-size: 16px;
+  line-height: 1.65;
+  margin: 0 0 18px;
+}
+.room-finish {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 14px;
+  border-top: 1.5px solid rgba(23, 60, 49, .15);
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: .08em;
+}
+
+/* ===== 6. QUADRO DE HABILIDADES & VALORES (MENU BOARD DO DESIGN SYSTEM) ===== */
+.menu-section {
+  background: var(--green);
+  color: var(--cream);
+  border-radius: 44px 44px 0 0;
+  margin-top: -36px;
+  border-top: 2px solid var(--ink);
+}
+.menu-section h2 em { color: var(--yellow); }
+.menu-stamp {
+  font-family: var(--display);
+  font-size: 36px;
+  line-height: 1.05;
+  background: var(--pink);
+  color: var(--ink);
+  padding: 24px 28px;
+  border-radius: 24px;
+  border: 2px solid var(--ink);
+  transform: rotate(7deg);
+  box-shadow: 6px 6px 0 var(--yellow);
+  flex-shrink: 0;
+}
+.menu {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8%;
+}
+.menu h3 {
+  font-family: var(--display);
+  font-size: 30px;
+  color: var(--yellow);
+  margin: 12px 0 20px;
+}
+.menu-row {
+  position: relative;
+  padding: 18px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  border-bottom: 1px solid rgba(255, 250, 240, .25);
+  font-weight: 700;
+  font-size: 17px;
+  transition: transform .35s var(--px-ease);
+}
+.menu-row small {
+  display: block;
+  font-size: 13.5px;
+  font-weight: 400;
+  opacity: .78;
+  margin-top: 6px;
+}
+.menu-row b {
+  white-space: nowrap;
+  font-size: 13px;
+  letter-spacing: .06em;
+  padding: 6px 12px;
+  border-radius: 99px;
+  background: rgba(255, 250, 240, .12);
+  transition: transform .4s var(--px-spring), background .3s, color .3s;
+}
+.menu-row:hover {
+  transform: translateX(8px);
+}
+.menu-row:hover b {
+  background: var(--yellow);
+  color: var(--ink);
+  transform: rotate(-4deg) scale(1.08);
+}
+
+/* ===== 7. PERGUNTAS & CURIOSIDADES (ACORDEÃO ANIMADO FAQ) ===== */
+.faq-section {
+  display: grid;
+  grid-template-columns: 1fr 1.35fr;
+  gap: 8%;
+  background: var(--cream);
+  border-radius: 44px 44px 0 0;
+  margin-top: -36px;
+  border-top: 2px solid var(--ink);
+}
+.faq-section h2 em { color: var(--green); }
+details {
+  border-bottom: 1.5px solid rgba(23, 60, 49, .22);
+  overflow: hidden;
+  transition: background .3s, padding .3s;
+}
+details[open] {
+  background: rgba(255, 223, 73, .28);
+  border-radius: 18px;
+  padding-inline: 18px;
+  margin-bottom: 8px;
+}
+summary {
+  font-weight: 700;
+  font-size: 17px;
+  padding: 22px 36px 22px 0;
+  list-style: none;
+  cursor: pointer;
+  position: relative;
+}
+summary::-webkit-details-marker { display: none; }
+summary::after {
+  content: '+';
+  position: absolute;
+  right: 4px;
+  top: 16px;
+  font-size: 28px;
+  font-weight: 400;
+  transition: transform .4s var(--px-ease);
+}
+details[open] summary::after {
+  content: '−';
+  transform: rotate(180deg);
+}
+details p {
+  font-size: 15.5px;
+  line-height: 1.7;
+  padding: 0 16px 20px 0;
+  margin: 0;
+}
+
+/* ===== 8. ENCERRAMENTO & RODAPÉ COM EFEITO JELLY ===== */
+.closing {
+  position: relative;
+  text-align: center;
+  overflow: hidden;
+  background: var(--hot);
+  color: var(--cream);
+  padding: 100px 6%;
+  border-top: 2px solid var(--ink);
+}
+.closing .eyebrow { justify-content: center; color: var(--yellow); }
+.closing .eyebrow i { background: var(--yellow); }
+.closing h2 {
+  font-family: var(--display);
+  font-size: clamp(56px, 9.5vw, 136px);
+  line-height: .92;
+  transform: rotate(-3deg);
+  margin: 24px 0 28px;
+  color: var(--cream);
+  text-shadow: 4px 4px 0 var(--ink);
+}
+.closing h2 em { color: var(--yellow); }
+.closing p:not(.eyebrow) {
+  font-size: 19px;
+  line-height: 1.6;
+  max-width: 540px;
+  margin: 0 auto 30px;
+}
+.closing .button {
+  background: var(--yellow);
+  color: var(--ink);
+}
+.closing .button .arw {
+  background: var(--ink);
+  color: var(--yellow);
+}
+
+footer {
+  background: var(--ink);
+  color: var(--cream);
+  padding: 60px 6.5% 32px;
+  border-radius: 44px 44px 0 0;
+  margin-top: -36px;
+  position: relative;
+  z-index: 12;
+}
+.footer-wordmark {
+  display: flex;
+  justify-content: center;
+  font-family: var(--display);
+  font-size: clamp(72px, 16vw, 210px);
+  line-height: .86;
+  color: var(--pink);
+  text-shadow: 5px 5px 0 #0b1f19;
+  margin-bottom: 32px;
+  user-select: none;
+}
+.footer-wordmark .jl {
+  display: inline-block;
+  transform-origin: 50% 100%;
+  cursor: pointer;
+}
+.footer-wordmark .jl.wob {
+  animation: doh-jelly .9s cubic-bezier(.3, .7, .4, 1) both;
+}
+@keyframes doh-jelly {
+  0% { transform: scale3d(1, 1, 1); }
+  18% { transform: scale3d(1.22, .78, 1); }
+  32% { transform: scale3d(.82, 1.2, 1) translateY(-4%); }
+  46% { transform: scale3d(1.12, .9, 1); }
+  60% { transform: scale3d(.95, 1.06, 1); }
+  74% { transform: scale3d(1.04, .97, 1); }
+  88% { transform: scale3d(.99, 1.01, 1); }
+  100% { transform: scale3d(1, 1, 1); }
+}
+.footer-bottom {
+  border-top: 1px solid rgba(255, 250, 240, .2);
+  padding-top: 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-size: 13px;
+  opacity: .85;
+}
+
+/* ===== CONTROLE FLUTUANTE DE APRESENTAÇÃO (SLIDE DECK MODE) ===== */
+.pres-bar {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(23, 60, 49, .92);
+  color: var(--cream);
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 2px solid var(--cream);
+  box-shadow: 0 14px 30px -10px rgba(0, 0, 0, .45);
+  backdrop-filter: blur(12px);
+}
+.pres-bar button {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 250, 240, .14);
+  color: var(--cream);
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+  transition: background .2s, transform .2s;
+}
+.pres-bar button:hover {
+  background: var(--yellow);
+  color: var(--ink);
+  transform: scale(1.08);
+}
+.pres-bar span {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 0 8px;
+  letter-spacing: .06em;
+}
+
+@media (max-width: 920px) {
+  #header { grid-template-columns: 1fr auto; }
+  #header nav { display: none; }
+  .hero-stage { grid-template-columns: 1fr; text-align: left; padding-top: 105px; }
+  .manifesto, .flavour-room, .menu, .faq-section { grid-template-columns: 1fr; }
+  .room-stage { border-right: 0; border-bottom: 2px solid var(--ink); }
+  .method article { grid-template-columns: 1fr; row-gap: 12px; }
+  .section-heading { flex-direction: column; align-items: flex-start; gap: 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- CABEÇALHO DO DESIGN SYSTEM -->
+<header id="header">
+  <a class="brand" href="#inicio">
+    <strong>JOÃO!</strong>
+    <span>COLÉGIO FECAP<br>TÉCNICO EM I.A.</span>
+  </a>
+  <nav aria-label="Seções da Apresentação">
+    <a href="#inicio" data-sec="inicio" aria-current="true">Início</a>
+    <a href="#manifesto" data-sec="manifesto">Sobre Mim</a>
+    <a href="#trajetoria" data-sec="trajetoria">Pilares</a>
+    <a href="#destaques" data-sec="destaques">Vivência</a>
+    <a href="#habilidades" data-sec="habilidades">Skills &amp; Valores</a>
+    <a href="#curiosidades" data-sec="curiosidades">Perguntas</a>
+  </nav>
+  <div class="header-actions">
+    <a class="button header-button" href="design-system.html" title="Abrir Catálogo do Design System">
+      Design System
+      <span class="arw" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M7 17 17 7M8.5 7H17v8.5"></path></svg>
+        <svg viewBox="0 0 24 24"><path d="M7 17 17 7M8.5 7H17v8.5"></path></svg>
+      </span>
+    </a>
+  </div>
+</header>
+
+<!-- 1. CAPA / HERO -->
+<section class="hero-stage" id="inicio" data-slide>
+  <canvas id="hero-sprinkles" aria-hidden="true"></canvas>
+
+  <div class="hero-copy">
+    <p class="eyebrow"><i></i> ENSINO MÉDIO TÉCNICO EM IA • COLÉGIO FECAP</p>
+    <h1>
+      <span>PRAZER,</span><br>
+      <span>SOU O</span><br>
+      <em>JOÃO!</em>
+    </h1>
+    <p class="description">
+      <b>Tecnologia, Inteligência Artificial &amp; Propósito.</b>
+      Estudante apaixonado por programação, criação de projetos e soluções criativas — unindo inovação tecnológica com os valores e a liderança do Clube de Desbravadores.
+    </p>
+    <div class="hero-ctas">
+      <a class="button" href="#manifesto">
+        Conhecer Minha História
+        <span class="arw" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M7 17 17 7M8.5 7H17v8.5"></path></svg>
+          <svg viewBox="0 0 24 24"><path d="M7 17 17 7M8.5 7H17v8.5"></path></svg>
+        </span>
+      </a>
+      <a class="hero-ghost" href="#trajetoria">Ver Meus 3 Pilares ↓</a>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="hero-halo" aria-hidden="true"></div>
+
+    <!-- Selo Giratório do Design System -->
+    <div class="happy-stamp" aria-hidden="true">
+      <svg viewBox="0 0 140 140">
+        <defs>
+          <path id="hero-stamp-path" d="M70,70 m-51,0 a51,51 0 1,1 102,0 a51,51 0 1,1 -102,0"></path>
+        </defs>
+        <circle cx="70" cy="70" r="68"></circle>
+        <g class="ring-text">
+          <text><textPath href="#hero-stamp-path" textLength="318" lengthAdjust="spacing">COLÉGIO FECAP • TÉCNICO EM I.A. • </textPath></text>
+        </g>
+      </svg>
+      <b>I.A.</b>
+    </div>
+
+    <!-- Moldura em Arco com a Foto do Usuário -->
+    <div class="portrait-card" id="portrait-card">
+      <img src="assets/minha-foto.png" alt="Foto de João Gouvea">
+      <span class="portrait-badge">João Gouvea ✨</span>
+    </div>
+  </div>
+</section>
+
+<main class="content">
+
+  <!-- 2. FAIXAS CRUZADAS ANIMADAS (CROSSING RIBBONS) -->
+  <div class="ribbons" aria-hidden="true">
+    <div class="ticker">
+      <div>
+        <span>INTELIGÊNCIA ARTIFICIAL</span><b>✳</b>
+        <span>COLÉGIO FECAP</span><b>✳</b>
+        <span>PROGRAMAÇÃO</span><b>✳</b>
+        <span>SOLUÇÕES CRIATIVAS</span><b>✳</b>
+        <span>INTELIGÊNCIA ARTIFICIAL</span><b>✳</b>
+        <span>COLÉGIO FECAP</span><b>✳</b>
+        <span>PROGRAMAÇÃO</span><b>✳</b>
+        <span>SOLUÇÕES CRIATIVAS</span><b>✳</b>
+      </div>
+    </div>
+    <div class="ticker ticker-b">
+      <div>
+        <span>CLUBE DE DESBRAVADORES</span><b>✳</b>
+        <span>LIDERANÇA &amp; DISCIPLINA</span><b>✳</b>
+        <span>TRABALHO EM EQUIPE</span><b>✳</b>
+        <span>COMUNHÃO COM DEUS</span><b>✳</b>
+        <span>CLUBE DE DESBRAVADORES</span><b>✳</b>
+        <span>LIDERANÇA &amp; DISCIPLINA</span><b>✳</b>
+        <span>TRABALHO EM EQUIPE</span><b>✳</b>
+        <span>COMUNHÃO COM DEUS</span><b>✳</b>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. SOBRE MIM (MANIFESTO COM LEITURA DINÂMICA) -->
+  <section class="section manifesto" id="manifesto" data-slide>
+    <div>
+      <p class="eyebrow"><i></i> 01 / SOBRE MIM</p>
+      <h2>Quem eu<br><em>sou hoje.</em></h2>
+      <div class="round-note" style="margin-top:32px">SEMPRE<br>APRENDENDO!</div>
+    </div>
+
+    <div class="manifesto-right" id="manifesto-text">
+      <p class="lead">
+        Sou um estudante do Ensino Médio Técnico em Inteligência Artificial no Colégio FECAP. Tenho interesse por tecnologia, programação e inteligência artificial, áreas nas quais busco aprender cada vez mais e desenvolver novas habilidades.
+      </p>
+      <p>
+        Gosto de explorar ferramentas tecnológicas, criar projetos e encontrar soluções criativas para diferentes problemas. Também participo do Clube de Desbravadores da Igreja Adventista do Sétimo Dia, onde aprendo sobre liderança, disciplina, trabalho em equipe, respeito e comunhão com Deus.
+      </p>
+      <p>
+        Sou uma pessoa que busca crescer tanto pessoal quanto profissionalmente, sempre tentando adquirir novos conhecimentos e superar desafios. Tenho grandes objetivos para o futuro e pretendo continuar estudando, aprimorando minhas habilidades e construindo uma carreira na área de tecnologia e inteligência artificial.
+      </p>
+
+      <div class="manifesto-pills">
+        <span>🎓 Colégio FECAP</span>
+        <span>🤖 Inteligência Artificial</span>
+        <span>⛺ Clube de Desbravadores</span>
+        <span>🚀 Foco no Futuro</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. MEUS 3 PILARES (CARTÕES EMPILHÁVEIS STICKY) -->
+  <section class="section method-section" id="trajetoria" data-slide>
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow"><i></i> 02 / MINHA BASE</p>
+        <h2>Meus três<br><em>pilares.</em></h2>
+      </div>
+      <p>Os três fundamentos que guiam meus estudos, meus valores pessoais e a carreira que estou construindo.</p>
+    </div>
+
+    <div class="method">
+      <article style="--k:0">
+        <div class="number">01</div>
+        <div>
+          <h3>Tecnologia &amp; IA na FECAP</h3>
+          <p>Estudante do Ensino Médio Técnico em Inteligência Artificial no Colégio FECAP. Adoro explorar novas ferramentas tecnológicas, programar e transformar ideias em projetos práticos que resolvem problemas reais de maneira criativa.</p>
+          <strong>ENSINO MÉDIO TÉCNICO EM IA • FECAP</strong>
+        </div>
+      </article>
+
+      <article style="--k:1">
+        <div class="number">02</div>
+        <div>
+          <h3>Clube de Desbravadores</h3>
+          <p>Participo ativamente do Clube de Desbravadores da Igreja Adventista do Sétimo Dia. É onde desenvolvo na prática valores essenciais para a vida: liderança, disciplina, trabalho em equipe, respeito ao próximo e comunhão com Deus.</p>
+          <strong>LIDERANÇA • DISCIPLINA • COMUNHÃO COM DEUS</strong>
+        </div>
+      </article>
+
+      <article style="--k:2">
+        <div class="number">03</div>
+        <div>
+          <h3>Visão de Futuro &amp; Carreira</h3>
+          <p>Busco crescer tanto pessoal quanto profissionalmente, encarando cada desafio como uma oportunidade de evolução. Meu grande objetivo é continuar estudando e construir uma carreira sólida em Tecnologia e Inteligência Artificial.</p>
+          <strong>CRESCIMENTO CONTÍNUO &amp; GRANDES OBJETIVOS</strong>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- 5. VITRINE INTERATIVA (FLAVOUR ROOM ADAPTADA PARA ÁREAS DA VIDA) -->
+  <section class="section showcase-section" id="destaques" data-slide>
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow"><i></i> 03 / INTERATIVIDADE DO DESIGN SYSTEM</p>
+        <h2>O que me<br><em>movimenta.</em></h2>
+      </div>
+      <p>Clique em cada item abaixo para explorar as áreas que fazem parte do meu dia a dia (componente <code>.flavour-room</code> do Design System).</p>
+    </div>
+
+    <div class="flavour-room" id="showcase-room" style="--flavour:#ffc2df">
+      <div class="room-stage">
+        <span class="room-stage-tag" id="room-tag">PILAR 01 / 04</span>
+        <div class="room-stage-icon" id="room-icon">🤖</div>
+        <span class="room-stage-tag">COLÉGIO FECAP • 2026</span>
+      </div>
+
+      <div class="room-editorial">
+        <div>
+          <p class="eyebrow">ESCOLHA UM TEMA PARA INSPECIONAR</p>
+          <div class="room-selector" role="group" aria-label="Áreas de interesse">
+            <button type="button" data-topic="0" aria-pressed="true">
+              <span class="taste-number">01</span>
+              <span>Inteligência Artificial &amp; Código</span>
+              <b>↗</b>
+            </button>
+            <button type="button" data-topic="1" aria-pressed="false">
+              <span class="taste-number">02</span>
+              <span>Projetos &amp; Soluções Criativas</span>
+              <b>↗</b>
+            </button>
+            <button type="button" data-topic="2" aria-pressed="false">
+              <span class="taste-number">03</span>
+              <span>Desbravadores &amp; Trabalho em Equipe</span>
+              <b>↗</b>
+            </button>
+            <button type="button" data-topic="3" aria-pressed="false">
+              <span class="taste-number">04</span>
+              <span>Carreira &amp; Objetivos Futuros</span>
+              <b>↗</b>
+            </button>
+          </div>
+        </div>
+
+        <div class="room-story" id="room-story">
+          <span class="eyebrow" id="room-sub" style="margin-bottom:6px">TÉCNICO EM IA • COLÉGIO FECAP</span>
+          <h3 id="room-title">Inteligência Artificial &amp; Código</h3>
+          <p id="room-desc">Aprender como os modelos de IA funcionam, escrever código e dominar novas ferramentas tecnológicas para criar sistemas inteligentes do zero.</p>
+          <div class="room-finish">
+            <span id="room-badge">FOCO: APRENDIZADO CONTÍNUO</span>
+            <span id="room-keywords">PYTHON / IA / INOVAÇÃO</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. QUADRO DE HABILIDADES & VALORES (MENU BOARD) -->
+  <section class="section menu-section" id="habilidades" data-slide>
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow" style="color:var(--yellow)"><i style="background:var(--yellow)"></i> 04 / COMPETÊNCIAS</p>
+        <h2>Tecnologia &amp;<br><em>Valores.</em></h2>
+      </div>
+      <div class="menu-stamp">HARD &amp;<br>SOFT SKILLS</div>
+    </div>
+
+    <div class="menu">
+      <div>
+        <h3>Tecnologia &amp; Estudos</h3>
+        <div class="menu-row">
+          <span>Inteligência Artificial<small>Ensino Médio Técnico no Colégio FECAP</small></span>
+          <b>FECAP</b>
+        </div>
+        <div class="menu-row">
+          <span>Programação &amp; Desenvolvimento<small>Criação de projetos práticos e lógica computacional</small></span>
+          <b>CÓDIGO</b>
+        </div>
+        <div class="menu-row">
+          <span>Ferramentas Tecnológicas<small>Exploração constante de novas plataformas e IAs</small></span>
+          <b>TECH</b>
+        </div>
+        <div class="menu-row">
+          <span>Soluções Criativas<small>Resolução de problemas com criatividade e inovação</small></span>
+          <b>CRIATIVIDADE</b>
+        </div>
+      </div>
+
+      <div>
+        <h3>Valores &amp; Desbravadores</h3>
+        <div class="menu-row">
+          <span>Liderança &amp; Disciplina<small>Vivência prática no Clube de Desbravadores (IASD)</small></span>
+          <b>LIDERANÇA</b>
+        </div>
+        <div class="menu-row">
+          <span>Trabalho em Equipe<small>Cooperação, empatia e respeito em grupo</small></span>
+          <b>EQUIPE</b>
+        </div>
+        <div class="menu-row">
+          <span>Comunhão com Deus<small>Princípios cristãos, ética e respeito ao próximo</small></span>
+          <b>FÉ &amp; VALORES</b>
+        </div>
+        <div class="menu-row">
+          <span>Superação de Desafios<small>Dedicação para crescer pessoal e profissionalmente</small></span>
+          <b>EVOLUÇÃO</b>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. PERGUNTAS E RESPOSTAS PARA A SALA (FAQ ACCORDION) -->
+  <section class="section faq-section" id="curiosidades" data-slide>
+    <div>
+      <p class="eyebrow"><i></i> 05 / BATE-PAPO COM A TURMA</p>
+      <h2>Perguntas<br><em>rápidas.</em></h2>
+      <p style="margin-top:18px;line-height:1.7">Clique em cada pergunta ao lado durante a apresentação para revelar os detalhes!</p>
+    </div>
+
+    <div class="questions">
+      <details open>
+        <summary>Por que escolhi estudar Inteligência Artificial na FECAP?</summary>
+        <p>Porque sempre tive curiosidade por tecnologia e programação. Na FECAP, consigo unir o Ensino Médio com uma formação técnica de ponta em IA, criando projetos reais e explorando as ferramentas que estão transformando o mundo.</p>
+      </details>
+      <details>
+        <summary>Como o Clube de Desbravadores influencia minha vida e meus estudos?</summary>
+        <p>No Clube de Desbravadores da Igreja Adventista do Sétimo Dia, aprendo valores que levo para a sala de aula e para a vida: disciplina, liderança, respeito, trabalho em equipe e comunhão com Deus. Isso me ajuda a manter o foco e colaborar melhor em qualquer projeto.</p>
+      </details>
+      <details>
+        <summary>Quais são os meus maiores objetivos para o futuro?</summary>
+        <p>Continuar estudando, aprofundar meus conhecimentos em Ciência da Computação e Inteligência Artificial, superar novos desafios e construir uma carreira sólida desenvolvendo soluções tecnológicas que impactem positivamente as pessoas.</p>
+      </details>
+      <details>
+        <summary>Como este Design System foi aplicado nesta apresentação?</summary>
+        <p>Extraímos todos os tokens visuais do Design System DOH! (fontes <em>Lilita One</em> e <em>DM Sans</em>, paleta vibrante em rosa, verde floresta, amarelo e azul, botões Glaze com efeito de calda e confeitos, faixas cruzadas animadas e cartões empilháveis) para contar a minha história!</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- 8. ENCERRAMENTO -->
+  <section class="closing" id="fim" data-slide>
+    <p class="eyebrow"><i></i> OBRIGADO PELA ATENÇÃO!</p>
+    <h2>Pronto para o<br><em>futuro!</em></h2>
+    <p>Sempre aprendendo, superando desafios e construindo meu caminho na tecnologia e inteligência artificial.</p>
+    <a class="button" href="#inicio">
+      Voltar ao Topo
+      <span class="arw" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M7 17 17 7M8.5 7H17v8.5"></path></svg>
+        <svg viewBox="0 0 24 24"><path d="M7 17 17 7M8.5 7H17v8.5"></path></svg>
+      </span>
+    </a>
+  </section>
+
+  <!-- RODAPÉ COM EFEITO JELLY NAS LETRAS -->
+  <footer>
+    <div class="footer-wordmark" aria-label="JOÃO!">
+      <span class="jl">J</span><span class="jl">O</span><span class="jl">Ã</span><span class="jl">O</span><span class="jl">!</span>
+    </div>
+    <div class="footer-bottom">
+      <span><strong>João Gouvea</strong> • Ensino Médio Técnico em IA — Colégio FECAP</span>
+      <span>Construído com o <strong>DOH! Design System</strong> • Passe o mouse nas letras acima!</span>
+    </div>
+  </footer>
+
+</main>
+
+<!-- BARRA FLUTUANTE DE APRESENTAÇÃO (PASSAR SLIDES PELO TECLADO OU CLIQUE) -->
+<div class="pres-bar" aria-label="Controles da Apresentação">
+  <button type="button" id="prev-slide" title="Seção Anterior (Seta Esquerda)">←</button>
+  <span id="slide-indicator">SLIDE 1 / 7</span>
+  <button type="button" id="next-slide" title="Próxima Seção (Seta Direita)">→</button>
+  <button type="button" id="fullscreen-btn" title="Tela Cheia (F11)">⛶</button>
+</div>
+
+<script>
+(() => {
+  // 1. Header fica sólido ao rolar a página
+  const header = document.getElementById('header');
+  const navLinks = [...document.querySelectorAll('#header nav a')];
+  const slides = [...document.querySelectorAll('[data-slide]')];
+  const indicator = document.getElementById('slide-indicator');
+
+  function onScroll() {
+    header.classList.toggle('solid', window.scrollY > 40);
+
+    // Atualiza link ativo e contador de slides
+    let activeIdx = 0;
+    const mid = window.scrollY + window.innerHeight * 0.38;
+    slides.forEach((sec, idx) => {
+      if (sec.offsetTop <= mid) activeIdx = idx;
+    });
+    indicator.textContent = `SLIDE ${activeIdx + 1} / ${slides.length}`;
+    const activeId = slides[activeIdx]?.id;
+    navLinks.forEach(a => {
+      if (a.dataset.sec === activeId) a.setAttribute('aria-current', 'true');
+      else a.removeAttribute('aria-current');
+    });
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // 2. Navegação estilo Slide Deck (botões e setas do teclado ← →)
+  function goToSlide(delta) {
+    let activeIdx = 0;
+    const mid = window.scrollY + window.innerHeight * 0.38;
+    slides.forEach((sec, idx) => {
+      if (sec.offsetTop <= mid) activeIdx = idx;
+    });
+    const nextIdx = Math.max(0, Math.min(slides.length - 1, activeIdx + delta));
+    slides[nextIdx]?.scrollIntoView({ behavior: 'smooth' });
+  }
+  document.getElementById('prev-slide')?.addEventListener('click', () => goToSlide(-1));
+  document.getElementById('next-slide')?.addEventListener('click', () => goToSlide(1));
+  document.getElementById('fullscreen-btn')?.addEventListener('click', () => {
+    if (!document.fullscreenElement) document.documentElement.requestFullscreen?.();
+    else document.exitFullscreen?.();
+  });
+  window.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'PageDown') {
+      e.preventDefault();
+      goToSlide(1);
+    } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+      e.preventDefault();
+      goToSlide(-1);
+    }
+  });
+
+  // 3. Efeito de Confeitos (Sprinkle Burst) ao clicar em qualquer botão .button
+  const burstCols = ['#ff7fb6', '#ffd23f', '#3d8cff', '#34c27a', '#8b5cf6', '#ff7a2f', '#fff6d6'];
+  document.addEventListener('pointerdown', e => {
+    const b = e.target.closest?.('.button');
+    if (!b || !Element.prototype.animate) return;
+    for (let i = 0; i < 14; i++) {
+      const s = document.createElement('i');
+      const a = Math.random() * Math.PI * 2;
+      const d = 40 + Math.random() * 70;
+      const r = Math.random() * 720 - 360;
+      s.className = 'glaze-pop';
+      s.style.left = e.clientX + 'px';
+      s.style.top = e.clientY + 'px';
+      s.style.background = burstCols[i % burstCols.length];
+      document.body.appendChild(s);
+      s.animate([
+        { transform: 'translate(-50%,-50%) rotate(0) scale(1)', opacity: 1 },
+        { transform: `translate(calc(-50% + ${Math.cos(a) * d}px), calc(-50% + ${Math.sin(a) * d + 30}px)) rotate(${r}deg) scale(.6)`, opacity: 0 }
+      ], { duration: 650 + Math.random() * 300, easing: 'cubic-bezier(.15,.7,.3,1)' }).onfinish = () => s.remove();
+    }
+  }, { passive: true });
+
+  // 4. Confeitos Flutuantes no Fundo do Hero (Drifting Sprinkles do Design System)
+  const canvas = document.getElementById('hero-sprinkles');
+  if (canvas) {
+    const COL = ['#ff4f8b', '#ffd23f', '#3d8cff', '#34c27a', '#8b5cf6', '#ff7a2f', '#fffaf0'];
+    let rnd = 7;
+    const R = () => (rnd = (rnd * 16807) % 2147483647) / 2147483647;
+    const ps = Array.from({ length: 34 }, () => ({
+      x: R(), y: R(), z: .35 + R() * .55, a: R() * 6.28,
+      va: (R() - .5) * .8, vy: .008 + R() * .014,
+      c: COL[(R() * COL.length) | 0], ph: R() * 6.28
+    }));
+    let W = 0, H = 0, dpr = 1, last = 0;
+    const size = () => {
+      const r = canvas.parentElement.getBoundingClientRect();
+      W = Math.max(300, r.width); H = Math.max(300, r.height);
+      dpr = Math.min(1.5, devicePixelRatio || 1);
+      canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
+    };
+    const draw = now => {
+      const dt = Math.min(.05, (now - last) / 1000 || .016); last = now;
+      const ctx = canvas.getContext('2d');
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, W, H);
+      const base = Math.min(W, H) * .015;
+      ps.forEach(p => {
+        p.y -= p.vy * dt * p.z; p.a += p.va * dt;
+        if (p.y < -.08) { p.y = 1.08; p.x = R(); }
+        const x = (p.x + Math.sin(now * .0006 + p.ph) * .01) * W, y = p.y * H;
+        const len = base * 2.5 * p.z, wd = base * .62 * p.z;
+        ctx.save(); ctx.translate(x, y); ctx.rotate(p.a);
+        ctx.globalAlpha = .55 + .35 * p.z;
+        ctx.fillStyle = p.c; ctx.beginPath();
+        if (ctx.roundRect) ctx.roundRect(-len / 2, -wd / 2, len, wd, wd / 2);
+        else ctx.rect(-len / 2, -wd / 2, len, wd);
+        ctx.fill(); ctx.restore();
+      });
+      requestAnimationFrame(draw);
+    };
+    window.addEventListener('resize', size, { passive: true });
+    size();
+    requestAnimationFrame(draw);
+  }
+
+  // 5. Efeito Manifesto: palavras se acendem conforme a leitura na tela
+  const manifestoBox = document.getElementById('manifesto-text');
+  if (manifestoBox) {
+    manifestoBox.querySelectorAll('p').forEach(p => {
+      const words = p.textContent.trim().split(/\s+/);
+      p.innerHTML = words.map(w => `<span class="px-f">${w}</span>`).join(' ');
+    });
+    const wordSpans = [...manifestoBox.querySelectorAll('.px-f')];
+    const updateWords = () => {
+      const rect = manifestoBox.getBoundingClientRect();
+      const viewH = window.innerHeight;
+      const progress = Math.max(0, Math.min(1, (viewH * 0.78 - rect.top) / (rect.height * 0.85)));
+      const litCount = Math.floor(progress * wordSpans.length);
+      wordSpans.forEach((s, i) => s.classList.toggle('on', i <= litCount));
+    };
+    window.addEventListener('scroll', updateWords, { passive: true });
+    updateWords();
+  }
+
+  // 6. Vitrine Interativa (Flavour Room adaptada para os 4 temas do João)
+  const topics = [
+    {
+      flavour: '#ffc2df',
+      tag: 'PILAR 01 / 04',
+      icon: '🤖',
+      sub: 'TÉCNICO EM IA • COLÉGIO FECAP',
+      title: 'Inteligência Artificial & Código',
+      desc: 'Aprender como os modelos de IA funcionam, desenvolver códigos e dominar novas ferramentas tecnológicas para criar soluções inteligentes.',
+      badge: 'FOCO: APRENDIZADO CONTÍNUO',
+      keywords: 'IA / PROGRAMAÇÃO / FECAP'
+    },
+    {
+      flavour: '#96c6ff',
+      tag: 'PILAR 02 / 04',
+      icon: '💡',
+      sub: 'RESOLUÇÃO DE PROBLEMAS',
+      title: 'Projetos & Soluções Criativas',
+      desc: 'Gosto de explorar ferramentas tecnológicas na prática, construir projetos do zero e encontrar abordagens criativas para diferentes desafios.',
+      badge: 'FOCO: CRIATIVIDADE PRÁTICA',
+      keywords: 'PROJETOS / INOVAÇÃO / DESIGN'
+    },
+    {
+      flavour: '#c8e6a0',
+      tag: 'PILAR 03 / 04',
+      icon: '⛺',
+      sub: 'IGREJA ADVENTISTA DO SÉTIMO DIA',
+      title: 'Clube de Desbravadores',
+      desc: 'Onde aprendo na prática sobre liderança, disciplina, trabalho em equipe, respeito ao próximo e comunhão com Deus.',
+      badge: 'FOCO: VALORES & LIDERANÇA',
+      keywords: 'LIDERANÇA / EQUIPE / FÉ'
+    },
+    {
+      flavour: '#ffdf49',
+      tag: 'PILAR 04 / 04',
+      icon: '🚀',
+      sub: 'CRESCIMENTO PESSOAL & PROFISSIONAL',
+      title: 'Carreira & Objetivos Futuros',
+      desc: 'Busco evoluir todos os dias, superar desafios e continuar estudando para construir uma grande carreira na área de tecnologia e inteligência artificial.',
+      badge: 'FOCO: VISÃO DE FUTURO',
+      keywords: 'CARREIRA / FUTURO / EVOLUÇÃO'
+    }
+  ];
+
+  const roomEl = document.getElementById('showcase-room');
+  const topicBtns = [...document.querySelectorAll('[data-topic]')];
+  topicBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = Number(btn.dataset.topic);
+      const t = topics[idx];
+      if (!t || !roomEl) return;
+      topicBtns.forEach(b => b.setAttribute('aria-pressed', String(b === btn)));
+      roomEl.style.setProperty('--flavour', t.flavour);
+      document.getElementById('room-tag').textContent = t.tag;
+      document.getElementById('room-icon').textContent = t.icon;
+      document.getElementById('room-sub').textContent = t.sub;
+      document.getElementById('room-title').textContent = t.title;
+      document.getElementById('room-desc').textContent = t.desc;
+      document.getElementById('room-badge').textContent = t.badge;
+      document.getElementById('room-keywords').textContent = t.keywords;
+    });
+  });
+
+  // 7. Efeito Jelly nas letras do rodapé ao passar o mouse
+  document.querySelectorAll('.footer-wordmark .jl').forEach(el => {
+    el.addEventListener('pointerenter', () => {
+      el.classList.remove('wob');
+      void el.offsetWidth;
+      el.classList.add('wob');
+    });
+  });
+})();
+</script>
+</body>
+</html>
