@@ -895,7 +895,13 @@ details p {
   overflow: hidden;
   background: var(--hot);
   color: var(--cream);
-  padding: 100px 6%;
+  padding: 110px 6% 150px;
+  min-height: min(860px, 100svh);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  isolation: isolate;
   border-top: 2px solid var(--ink);
 }
 .closing .eyebrow { justify-content: center; color: var(--yellow); }
@@ -923,6 +929,61 @@ details p {
 .closing .button .arw {
   background: var(--ink);
   color: var(--yellow);
+}
+
+.closing > *:not(.px-pit):not(.closing-star) {
+  position: relative;
+  z-index: 2;
+  pointer-events: none;
+}
+.closing .button, .closing a, .closing .px-hint {
+  pointer-events: auto;
+}
+.closing .closing-star {
+  position: absolute;
+  right: 7%;
+  top: 42px;
+  font-size: clamp(54px, 6vw, 86px);
+  color: var(--yellow);
+  text-shadow: 4px 4px 0 var(--ink);
+  animation: hero-stamp 18s linear infinite;
+  z-index: 2;
+  pointer-events: none;
+  user-select: none;
+}
+.px-pit {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  touch-action: pan-y;
+  cursor: grab;
+}
+.px-pit:active {
+  cursor: grabbing;
+}
+.px-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 22px;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  color: var(--cream);
+  background: rgba(23, 60, 49, .38);
+  border: 1.5px solid rgba(255, 250, 240, .45);
+  padding: 9px 18px;
+  border-radius: 99px;
+  backdrop-filter: blur(8px);
+  transition: transform .3s var(--px-spring), background .25s, color .25s;
+}
+.px-hint:hover {
+  background: var(--yellow);
+  color: var(--ink);
+  border-color: var(--ink);
+  transform: translateY(-2px) scale(1.03);
 }
 
 footer {
@@ -1341,8 +1402,10 @@ footer {
     </div>
   </section>
 
-  <!-- 8. ENCERRAMENTO -->
+  <!-- 8. ENCERRAMENTO COM PISCINA DE FÍSICA INTERATIVA (.px-pit) -->
   <section class="closing" id="fim" data-slide>
+    <canvas class="px-pit" id="closing-pit" aria-label="Medalhões interativos de IA e Tecnologia — arraste e jogue com o mouse"></canvas>
+    <span class="closing-star" aria-hidden="true">✳</span>
     <p class="eyebrow"><i></i> OBRIGADO PELA ATENÇÃO!</p>
     <h2>Pronto para o<br><em>futuro!</em></h2>
     <p>Sempre aprendendo, superando desafios e construindo meu caminho na tecnologia e inteligência artificial.</p>
@@ -1353,6 +1416,9 @@ footer {
         <svg viewBox="0 0 24 24"><path d="M7 17 17 7M8.5 7H17v8.5"></path></svg>
       </span>
     </a>
+    <button type="button" class="px-hint" id="respawn-pit" title="Soltar medalhões novamente do topo">
+      ✋ Segure e arremesse os medalhões de IA &amp; Tech! • Soltar de novo ↻
+    </button>
   </section>
 
   <!-- RODAPÉ COM EFEITO JELLY NAS LETRAS -->
@@ -1584,6 +1650,268 @@ footer {
       el.classList.add('wob');
     });
   });
+
+  // 8. Piscina de Física Interativa no Encerramento (.px-pit com Gravidade, Colisão & Arremesso)
+  (() => {
+    const pit = document.getElementById('closing-pit');
+    if (!pit) return;
+    const ctx = pit.getContext('2d');
+
+    const badgeSpecs = [
+      { icon: '🤖', label: 'I.A.', bg: '#ffdf49', ring: '#173c31' },
+      { icon: '🐍', label: 'PYTHON', bg: '#96c6ff', ring: '#173c31' },
+      { icon: '🎓', label: 'FECAP', bg: '#fffaf0', ring: '#173c31' },
+      { icon: '💻', label: 'CÓDIGO', bg: '#c8e6a0', ring: '#173c31' },
+      { icon: '⚡', label: 'TECH', bg: '#ffc2df', ring: '#173c31' },
+      { icon: '🧠', label: 'NEURAL', bg: '#d8b4fe', ring: '#173c31' },
+      { icon: '🚀', label: 'FUTURO', bg: '#ffb067', ring: '#173c31' },
+      { icon: '💡', label: 'IDEIAS', bg: '#ffdf49', ring: '#173c31' },
+      { icon: '⚙️', label: 'DADOS', bg: '#96c6ff', ring: '#173c31' },
+      { icon: '✨', label: 'INOVAÇÃO', bg: '#c8e6a0', ring: '#173c31' }
+    ];
+
+    function createMedallionSprite(spec) {
+      const S = 220;
+      const c = document.createElement('canvas');
+      c.width = S;
+      c.height = S;
+      const g = c.getContext('2d');
+      const cx = S / 2, cy = S / 2, R = S * 0.43;
+
+      g.save();
+      g.beginPath();
+      g.arc(cx + 5, cy + 6, R, 0, Math.PI * 2);
+      g.fillStyle = 'rgba(23, 60, 49, 0.55)';
+      g.fill();
+      g.restore();
+
+      g.beginPath();
+      g.arc(cx, cy, R, 0, Math.PI * 2);
+      g.fillStyle = spec.bg;
+      g.fill();
+      g.lineWidth = 7;
+      g.strokeStyle = spec.ring;
+      g.stroke();
+
+      g.save();
+      g.beginPath();
+      g.arc(cx, cy, R - 8, Math.PI * 1.12, Math.PI * 1.88);
+      g.lineWidth = 8;
+      g.lineCap = 'round';
+      g.strokeStyle = 'rgba(255, 255, 255, 0.55)';
+      g.stroke();
+      g.restore();
+
+      g.save();
+      g.beginPath();
+      g.setLineDash([8, 7]);
+      g.arc(cx, cy, R - 16, 0, Math.PI * 2);
+      g.lineWidth = 3;
+      g.strokeStyle = 'rgba(23, 60, 49, 0.35)';
+      g.stroke();
+      g.restore();
+
+      g.font = '56px "Segoe UI Emoji", "Apple Color Emoji", sans-serif';
+      g.textAlign = 'center';
+      g.textBaseline = 'middle';
+      g.fillText(spec.icon, cx, cy - 14);
+
+      const pillW = Math.min(R * 1.58, Math.max(92, spec.label.length * 14 + 26));
+      const pillH = 30;
+      const pillX = cx - pillW / 2;
+      const pillY = cy + 25;
+      g.beginPath();
+      if (g.roundRect) g.roundRect(pillX, pillY, pillW, pillH, 15);
+      else g.rect(pillX, pillY, pillW, pillH);
+      g.fillStyle = '#173c31';
+      g.fill();
+
+      g.font = '800 14px "DM Sans", Arial, sans-serif';
+      g.fillStyle = '#fffaf0';
+      g.fillText(spec.label, cx, pillY + pillH / 2 + 1);
+
+      return c;
+    }
+
+    const sprites = badgeSpecs.map(createMedallionSprite);
+    let W = 0, H = 0, floorY = 0, dpr = 1, bodies = [], drag = null, last = 0, visible = true;
+
+    const size = () => {
+      const r = pit.parentElement.getBoundingClientRect();
+      W = Math.max(320, r.width);
+      H = Math.max(340, r.height);
+      floorY = H - 38;
+      dpr = Math.min(1.75, window.devicePixelRatio || 1);
+      pit.width = Math.round(W * dpr);
+      pit.height = Math.round(H * dpr);
+    };
+
+    const spawn = () => {
+      const rad = Math.max(38, Math.min(68, Math.min(W, H) * 0.095));
+      bodies = sprites.map((sprite, i) => ({
+        x: (0.1 + (i % 5) * 0.2 + (Math.random() - 0.5) * 0.05) * W,
+        y: -rad - i * 55 - Math.random() * 30,
+        vx: (Math.random() - 0.5) * 190,
+        vy: Math.random() * 40,
+        r: rad,
+        a: (Math.random() - 0.5) * 0.9,
+        va: (Math.random() - 0.5) * 2.6,
+        sprite
+      }));
+    };
+
+    pit.addEventListener('pointerdown', e => {
+      const rect = pit.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      for (let i = bodies.length - 1; i >= 0; i--) {
+        const b = bodies[i];
+        if (Math.hypot(x - b.x, y - b.y) <= b.r * 1.08) {
+          drag = { b, ox: x - b.x, oy: y - b.y, lx: x, ly: y, moved: false };
+          bodies.splice(i, 1);
+          bodies.push(b);
+          pit.setPointerCapture?.(e.pointerId);
+          break;
+        }
+      }
+    });
+
+    pit.addEventListener('pointermove', e => {
+      if (!drag) return;
+      const rect = pit.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const dx = x - drag.lx;
+      const dy = y - drag.ly;
+      if (Math.hypot(dx, dy) > 2) drag.moved = true;
+      drag.b.vx = dx * 42;
+      drag.b.vy = dy * 42;
+      drag.b.va = Math.max(-8, Math.min(8, dx * 0.12));
+      drag.b.x = x - drag.ox;
+      drag.b.y = y - drag.oy;
+      drag.lx = x;
+      drag.ly = y;
+    });
+
+    const releaseDrag = () => {
+      if (!drag) return;
+      if (!drag.moved) {
+        drag.b.vy = -520 - Math.random() * 180;
+        drag.b.vx = (Math.random() - 0.5) * 340;
+        drag.b.va = (Math.random() - 0.5) * 6;
+      }
+      drag = null;
+    };
+    window.addEventListener('pointerup', releaseDrag);
+    window.addEventListener('pointercancel', releaseDrag);
+
+    document.getElementById('respawn-pit')?.addEventListener('click', () => {
+      size();
+      spawn();
+    });
+
+    if ('IntersectionObserver' in window) {
+      let hasDroppedOnce = false;
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(en => {
+          visible = en.isIntersecting;
+          if (en.isIntersecting && !hasDroppedOnce) {
+            hasDroppedOnce = true;
+            size();
+            spawn();
+          }
+        });
+      }, { threshold: 0.15 });
+      io.observe(pit.parentElement);
+    }
+
+    const step = now => {
+      const dt = Math.min(0.033, (now - last) / 1000 || 0.016);
+      last = now;
+      if (!W || bodies.length === 0) {
+        size();
+        spawn();
+      }
+      if (visible) {
+        for (const b of bodies) {
+          if (drag && drag.b === b) continue;
+          b.vy += 980 * dt;
+          b.x += b.vx * dt;
+          b.y += b.vy * dt;
+          b.a += b.va * dt;
+          b.vx *= 0.993;
+          b.va *= 0.99;
+
+          if (b.y + b.r > floorY) {
+            b.y = floorY - b.r;
+            b.vy = -b.vy * 0.52;
+            b.va += b.vx * 0.0025;
+            b.vx *= 0.9;
+            if (Math.abs(b.vy) < 18) b.vy = 0;
+          }
+          if (b.x - b.r < 0) {
+            b.x = b.r;
+            b.vx = Math.abs(b.vx) * 0.6;
+          } else if (b.x + b.r > W) {
+            b.x = W - b.r;
+            b.vx = -Math.abs(b.vx) * 0.6;
+          }
+          if (b.y - b.r < -H * 0.4) {
+            b.y = -H * 0.4 + b.r;
+            b.vy = Math.abs(b.vy) * 0.4;
+          }
+        }
+
+        for (let i = 0; i < bodies.length; i++) {
+          for (let j = i + 1; j < bodies.length; j++) {
+            const a = bodies[i], b = bodies[j];
+            const dx = b.x - a.x, dy = b.y - a.y;
+            const d = Math.hypot(dx, dy);
+            const min = a.r + b.r;
+            if (d > 0 && d < min) {
+              const nx = dx / d, ny = dy / d;
+              const overlap = (min - d) * 0.5;
+              if (!drag || drag.b !== a) { a.x -= nx * overlap; a.y -= ny * overlap; }
+              if (!drag || drag.b !== b) { b.x += nx * overlap; b.y += ny * overlap; }
+              const dvx = b.vx - a.vx, dvy = b.vy - a.vy;
+              const vn = dvx * nx + dvy * ny;
+              if (vn < 0) {
+                const imp = vn * 0.72;
+                if (!drag || drag.b !== a) {
+                  a.vx += nx * imp;
+                  a.vy += ny * imp;
+                  a.va += (nx * dvy - ny * dvx) * 0.0015;
+                }
+                if (!drag || drag.b !== b) {
+                  b.vx -= nx * imp;
+                  b.vy -= ny * imp;
+                  b.va -= (nx * dvy - ny * dvx) * 0.0015;
+                }
+              }
+            }
+          }
+        }
+
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        ctx.clearRect(0, 0, W, H);
+        for (const b of bodies) {
+          ctx.save();
+          ctx.translate(b.x, b.y);
+          ctx.rotate(b.a);
+          const drawR = b.r * 1.12;
+          ctx.drawImage(b.sprite, -drawR, -drawR, drawR * 2, drawR * 2);
+          ctx.restore();
+        }
+      }
+      requestAnimationFrame(step);
+    };
+
+    window.addEventListener('resize', () => {
+      size();
+      spawn();
+    }, { passive: true });
+    requestAnimationFrame(step);
+  })();
 })();
 </script>
 </body>
