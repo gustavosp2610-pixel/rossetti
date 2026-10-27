@@ -335,6 +335,7 @@ em { font-style: normal; font-family: var(--display); font-weight: 400; }
   z-index: 3;
   display: grid;
   place-items: center;
+  perspective: 1000px;
 }
 .hero-halo {
   position: absolute;
@@ -355,12 +356,14 @@ em { font-style: normal; font-family: var(--display); font-weight: 400; }
   border-radius: 210px 210px 32px 32px;
   overflow: hidden;
   box-shadow: 12px 14px 0 var(--ink), 0 36px 70px -30px rgba(23, 60, 49, .55);
-  transform: rotate(2deg);
-  transition: transform .5s var(--px-spring), box-shadow .5s;
+  transform-style: preserve-3d;
+  transform: rotate(2deg) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translate3d(var(--tx, 0px), var(--ty, 0px), 0);
+  transition: transform .22s var(--px-ease), box-shadow .4s;
+  will-change: transform;
+  cursor: pointer;
 }
 .portrait-card:hover {
-  transform: rotate(0deg) scale(1.02);
-  box-shadow: 16px 18px 0 var(--ink), 0 42px 80px -28px rgba(23, 60, 49, .65);
+  box-shadow: 18px 20px 0 var(--ink), 0 46px 85px -26px rgba(23, 60, 49, .7);
 }
 .portrait-card img {
   width: 100%;
@@ -368,6 +371,8 @@ em { font-style: normal; font-family: var(--display); font-weight: 400; }
   object-fit: cover;
   object-position: center 18%;
   display: block;
+  transform: scale(1.05) translate3d(calc(var(--tx, 0px) * -0.55), calc(var(--ty, 0px) * -0.55), 0);
+  transition: transform .25s var(--px-ease);
 }
 .portrait-badge {
   position: absolute;
@@ -380,8 +385,9 @@ em { font-style: normal; font-family: var(--display); font-weight: 400; }
   font-family: var(--display);
   font-size: 20px;
   color: var(--ink);
-  transform: rotate(-4deg);
+  transform: rotate(-4deg) translate3d(calc(var(--tx, 0px) * 0.75), calc(var(--ty, 0px) * 0.75), 24px);
   box-shadow: 4px 4px 0 var(--ink);
+  transition: transform .25s var(--px-ease);
 }
 .happy-stamp {
   position: absolute;
@@ -606,21 +612,47 @@ em { font-style: normal; font-family: var(--display); font-weight: 400; }
 }
 .method {
   display: block;
+  perspective: 1200px;
 }
 .method article {
   position: sticky;
-  top: calc(104px + var(--k, 0) * 24px);
+  top: calc(108px + var(--k, 0) * 24px);
   background: var(--cream);
   border: 2px solid var(--ink);
   border-radius: 32px;
   padding: clamp(28px, 4vw, 48px);
-  margin: 0 auto 28px;
+  padding-right: clamp(28px, 22vw, 260px);
+  margin: 0 auto 32px;
   max-width: 1020px;
+  min-height: clamp(250px, 36vh, 340px);
   display: grid;
   grid-template-columns: auto 1fr;
   column-gap: clamp(24px, 4vw, 56px);
   align-items: center;
+  overflow: hidden;
   box-shadow: 0 30px 60px -38px rgba(23, 60, 49, .55), 8px 8px 0 var(--ink);
+  transform-origin: 50% 0%;
+  transform: scale(var(--s, 1)) rotate(var(--rot, 0deg));
+  transition: transform .12s linear, filter .2s;
+  filter: brightness(var(--b, 1));
+  will-change: transform;
+}
+.px-card-donut {
+  position: absolute;
+  right: clamp(-32px, -1.5vw, -4px);
+  top: 50%;
+  width: clamp(145px, 19vw, 235px);
+  aspect-ratio: 1;
+  transform: translateY(-50%) rotate(var(--r, 0deg));
+  filter: drop-shadow(0 20px 22px rgba(23, 60, 49, .28));
+  pointer-events: none;
+  user-select: none;
+  will-change: transform;
+}
+.px-card-donut svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
 }
 .method article .number {
   font-family: var(--display);
@@ -670,10 +702,16 @@ em { font-style: normal; font-family: var(--display); font-weight: 400; }
   border: 2px solid var(--ink);
   background: var(--cream);
   overflow: hidden;
-  box-shadow: 10px 12px 0 var(--ink);
+  transform-style: preserve-3d;
+  box-shadow: 10px 12px 0 var(--ink), 0 40px 110px -42px var(--flavour, #ffc2df);
+  transition: box-shadow .55s var(--ease);
   min-height: 480px;
 }
 .room-stage {
+  --photo-x: 0px;
+  --photo-y: 0px;
+  --rx: 0deg;
+  --ry: 0deg;
   background: var(--flavour, #ffc2df);
   padding: 36px;
   display: flex;
@@ -682,7 +720,9 @@ em { font-style: normal; font-family: var(--display); font-weight: 400; }
   align-items: center;
   position: relative;
   border-right: 2px solid var(--ink);
+  perspective: 900px;
   transition: background .45s var(--ease);
+  cursor: pointer;
 }
 .room-stage-icon {
   width: min(240px, 55vw);
@@ -690,15 +730,34 @@ em { font-style: normal; font-family: var(--display); font-weight: 400; }
   border-radius: 50%;
   background: var(--cream);
   border: 2.5px solid var(--ink);
-  box-shadow: 8px 8px 0 var(--ink);
+  box-shadow: 8px 8px 0 var(--ink), 0 24px 45px -22px rgba(23, 60, 49, .45);
   display: grid;
   place-items: center;
   font-size: 88px;
   margin: auto 0;
-  transition: transform .5s var(--px-spring);
+  transform-style: preserve-3d;
+  transform: translate3d(var(--photo-x), var(--photo-y), 0) rotateX(var(--rx)) rotateY(var(--ry)) scale(1.015);
+  transition: transform .22s var(--px-ease), box-shadow .35s;
+  will-change: transform;
 }
 .room-stage:hover .room-stage-icon {
-  transform: rotate(-6deg) scale(1.06);
+  transform: translate3d(var(--photo-x), var(--photo-y), 0) rotateX(var(--rx)) rotateY(var(--ry)) scale(1.07);
+  box-shadow: 12px 14px 0 var(--ink), 0 32px 55px -20px rgba(23, 60, 49, .55);
+}
+.room-stage-icon.swap {
+  animation: icon-pop .55s var(--px-spring);
+}
+@keyframes icon-pop {
+  0% { transform: scale(.65) rotate(-18deg); opacity: .3; }
+  60% { transform: scale(1.1) rotate(5deg); opacity: 1; }
+  100% { transform: translate3d(var(--photo-x), var(--photo-y), 0) rotateX(var(--rx)) rotateY(var(--ry)) scale(1.015); }
+}
+.room-story.swap {
+  animation: story-swap .48s var(--px-spring);
+}
+@keyframes story-swap {
+  0% { opacity: 0; transform: translateY(16px) rotate(1deg); }
+  100% { opacity: 1; transform: none; }
 }
 .room-stage-tag {
   align-self: flex-start;
@@ -1082,7 +1141,8 @@ footer {
   .hero-stage { grid-template-columns: 1fr; text-align: left; padding-top: 105px; }
   .manifesto, .flavour-room, .menu, .faq-section { grid-template-columns: 1fr; }
   .room-stage { border-right: 0; border-bottom: 2px solid var(--ink); }
-  .method article { grid-template-columns: 1fr; row-gap: 12px; }
+  .method article { grid-template-columns: 1fr; row-gap: 12px; padding-right: 28px; }
+  .px-card-donut { width: 92px; top: 18px; right: -10px; transform: rotate(var(--r, 0deg)); }
   .section-heading { flex-direction: column; align-items: flex-start; gap: 16px; }
 }
 </style>
@@ -1242,6 +1302,15 @@ footer {
           <p>Estudante do Ensino Médio Técnico em Inteligência Artificial no Colégio FECAP. Adoro explorar novas ferramentas tecnológicas, programar e transformar ideias em projetos práticos que resolvem problemas reais de maneira criativa.</p>
           <strong>ENSINO MÉDIO TÉCNICO EM IA • FECAP</strong>
         </div>
+        <div class="px-card-donut" aria-hidden="true">
+          <svg viewBox="0 0 200 200">
+            <defs><path id="p-ring-1" d="M100,100 m-72,0 a72,72 0 1,1 144,0 a72,72 0 1,1 -144,0"/></defs>
+            <circle cx="100" cy="100" r="90" fill="#ffdf49" stroke="#173c31" stroke-width="5"/>
+            <circle cx="100" cy="100" r="54" fill="#ff98c9" stroke="#173c31" stroke-width="4" stroke-dasharray="10 7"/>
+            <text font-family="DM Sans, sans-serif" font-weight="800" font-size="13.5" fill="#173c31" letter-spacing="2.2"><textPath href="#p-ring-1">INTELIGÊNCIA ARTIFICIAL • FECAP •</textPath></text>
+            <text x="100" y="114" text-anchor="middle" font-size="46">🤖</text>
+          </svg>
+        </div>
       </article>
 
       <article style="--k:1">
@@ -1251,6 +1320,15 @@ footer {
           <p>Participo ativamente do Clube de Desbravadores da Igreja Adventista do Sétimo Dia. É onde desenvolvo na prática valores essenciais para a vida: liderança, disciplina, trabalho em equipe, respeito ao próximo e comunhão com Deus.</p>
           <strong>LIDERANÇA • DISCIPLINA • COMUNHÃO COM DEUS</strong>
         </div>
+        <div class="px-card-donut" aria-hidden="true">
+          <svg viewBox="0 0 200 200">
+            <defs><path id="p-ring-2" d="M100,100 m-72,0 a72,72 0 1,1 144,0 a72,72 0 1,1 -144,0"/></defs>
+            <circle cx="100" cy="100" r="90" fill="#c8e6a0" stroke="#173c31" stroke-width="5"/>
+            <circle cx="100" cy="100" r="54" fill="#fffaf0" stroke="#173c31" stroke-width="4" stroke-dasharray="10 7"/>
+            <text font-family="DM Sans, sans-serif" font-weight="800" font-size="13.5" fill="#173c31" letter-spacing="2.1"><textPath href="#p-ring-2">DESBRAVADORES • LIDERANÇA &amp; FÉ •</textPath></text>
+            <text x="100" y="114" text-anchor="middle" font-size="46">⛺</text>
+          </svg>
+        </div>
       </article>
 
       <article style="--k:2">
@@ -1259,6 +1337,15 @@ footer {
           <h3>Visão de Futuro &amp; Carreira</h3>
           <p>Busco crescer tanto pessoal quanto profissionalmente, encarando cada desafio como uma oportunidade de evolução. Meu grande objetivo é continuar estudando e construir uma carreira sólida em Tecnologia e Inteligência Artificial.</p>
           <strong>CRESCIMENTO CONTÍNUO &amp; GRANDES OBJETIVOS</strong>
+        </div>
+        <div class="px-card-donut" aria-hidden="true">
+          <svg viewBox="0 0 200 200">
+            <defs><path id="p-ring-3" d="M100,100 m-72,0 a72,72 0 1,1 144,0 a72,72 0 1,1 -144,0"/></defs>
+            <circle cx="100" cy="100" r="90" fill="#ff98c9" stroke="#173c31" stroke-width="5"/>
+            <circle cx="100" cy="100" r="54" fill="#ffdf49" stroke="#173c31" stroke-width="4" stroke-dasharray="10 7"/>
+            <text font-family="DM Sans, sans-serif" font-weight="800" font-size="13.5" fill="#173c31" letter-spacing="2.2"><textPath href="#p-ring-3">CARREIRA TECH • VISÃO DE FUTURO •</textPath></text>
+            <text x="100" y="114" text-anchor="middle" font-size="46">🚀</text>
+          </svg>
         </div>
       </article>
     </div>
@@ -1624,23 +1711,119 @@ footer {
   ];
 
   const roomEl = document.getElementById('showcase-room');
+  const roomStage = roomEl?.querySelector('.room-stage');
+  const roomIcon = document.getElementById('room-icon');
+  const roomStory = document.getElementById('room-story');
   const topicBtns = [...document.querySelectorAll('[data-topic]')];
+  let currentTopicIdx = 0;
+
+  function selectTopic(idx) {
+    const t = topics[idx];
+    if (!t || !roomEl) return;
+    currentTopicIdx = idx;
+    topicBtns.forEach((b, k) => b.setAttribute('aria-pressed', String(k === idx)));
+    roomEl.style.setProperty('--flavour', t.flavour);
+    document.getElementById('room-tag').textContent = t.tag;
+    if (roomIcon) {
+      roomIcon.textContent = t.icon;
+      roomIcon.classList.remove('swap');
+      void roomIcon.offsetWidth;
+      roomIcon.classList.add('swap');
+    }
+    document.getElementById('room-sub').textContent = t.sub;
+    document.getElementById('room-title').textContent = t.title;
+    document.getElementById('room-desc').textContent = t.desc;
+    document.getElementById('room-badge').textContent = t.badge;
+    document.getElementById('room-keywords').textContent = t.keywords;
+    if (roomStory) {
+      roomStory.classList.remove('swap');
+      void roomStory.offsetWidth;
+      roomStory.classList.add('swap');
+    }
+  }
+
   topicBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const idx = Number(btn.dataset.topic);
-      const t = topics[idx];
-      if (!t || !roomEl) return;
-      topicBtns.forEach(b => b.setAttribute('aria-pressed', String(b === btn)));
-      roomEl.style.setProperty('--flavour', t.flavour);
-      document.getElementById('room-tag').textContent = t.tag;
-      document.getElementById('room-icon').textContent = t.icon;
-      document.getElementById('room-sub').textContent = t.sub;
-      document.getElementById('room-title').textContent = t.title;
-      document.getElementById('room-desc').textContent = t.desc;
-      document.getElementById('room-badge').textContent = t.badge;
-      document.getElementById('room-keywords').textContent = t.keywords;
-    });
+    btn.addEventListener('click', () => selectTopic(Number(btn.dataset.topic)));
   });
+
+  // Clicar no palco colorido da vitrine também avança para o próximo tema com animação
+  roomStage?.addEventListener('click', () => {
+    selectTopic((currentTopicIdx + 1) % topics.length);
+  });
+
+  // 6B. Tilt 3D com o Mouse na Foto do Hero (#portrait-card) e no Palco da Vitrine (.room-stage)
+  const portraitCard = document.getElementById('portrait-card');
+  if (portraitCard) {
+    portraitCard.addEventListener('pointermove', e => {
+      const r = portraitCard.getBoundingClientRect();
+      const nx = (e.clientX - r.left) / r.width - 0.5;
+      const ny = (e.clientY - r.top) / r.height - 0.5;
+      portraitCard.style.setProperty('--rx', `${(-ny * 18).toFixed(2)}deg`);
+      portraitCard.style.setProperty('--ry', `${(nx * 20).toFixed(2)}deg`);
+      portraitCard.style.setProperty('--tx', `${(nx * 14).toFixed(1)}px`);
+      portraitCard.style.setProperty('--ty', `${(ny * 14).toFixed(1)}px`);
+    });
+    portraitCard.addEventListener('pointerleave', () => {
+      portraitCard.style.setProperty('--rx', '0deg');
+      portraitCard.style.setProperty('--ry', '0deg');
+      portraitCard.style.setProperty('--tx', '0px');
+      portraitCard.style.setProperty('--ty', '0px');
+    });
+  }
+
+  if (roomStage) {
+    roomStage.addEventListener('pointermove', e => {
+      const r = roomStage.getBoundingClientRect();
+      const nx = (e.clientX - r.left) / r.width - 0.5;
+      const ny = (e.clientY - r.top) / r.height - 0.5;
+      roomStage.style.setProperty('--rx', `${(-ny * 22).toFixed(2)}deg`);
+      roomStage.style.setProperty('--ry', `${(nx * 24).toFixed(2)}deg`);
+      roomStage.style.setProperty('--photo-x', `${(nx * 18).toFixed(1)}px`);
+      roomStage.style.setProperty('--photo-y', `${(ny * 18).toFixed(1)}px`);
+    });
+    roomStage.addEventListener('pointerleave', () => {
+      roomStage.style.setProperty('--rx', '0deg');
+      roomStage.style.setProperty('--ry', '0deg');
+      roomStage.style.setProperty('--photo-x', '0px');
+      roomStage.style.setProperty('--photo-y', '0px');
+    });
+  }
+
+  // 6C. Profundidade 3D nos Cartões Empilháveis (.method article Scroll Scale & Selo Giratório .px-card-donut)
+  const methodCards = [...document.querySelectorAll('.method article')];
+  if (methodCards.length) {
+    const updateMethodStack = () => {
+      const sy = window.scrollY;
+      methodCards.forEach((card, i) => {
+        const donut = card.querySelector('.px-card-donut');
+        if (donut) {
+          donut.style.setProperty('--r', `${(sy * 0.16 + i * 48).toFixed(1)}deg`);
+        }
+        const nextCard = methodCards[i + 1];
+        if (!nextCard) {
+          card.style.setProperty('--s', '1');
+          card.style.setProperty('--rot', '0deg');
+          card.style.setProperty('--b', '1');
+          return;
+        }
+        const rect = card.getBoundingClientRect();
+        const nextRect = nextCard.getBoundingClientRect();
+        const gap = nextRect.top - rect.top;
+        const maxDist = Math.max(220, rect.height);
+        // Quando o próximo cartão sobe por cima deste, progress vai de 0 a 1
+        const overlap = Math.max(0, Math.min(1, 1 - (gap - 24) / maxDist));
+        const scale = 1 - overlap * 0.065;
+        const tilt = (i % 2 === 0 ? -1.4 : 1.4) * overlap;
+        const bright = 1 - overlap * 0.06;
+        card.style.setProperty('--s', scale.toFixed(4));
+        card.style.setProperty('--rot', `${tilt.toFixed(2)}deg`);
+        card.style.setProperty('--b', bright.toFixed(3));
+      });
+    };
+    window.addEventListener('scroll', updateMethodStack, { passive: true });
+    window.addEventListener('resize', updateMethodStack, { passive: true });
+    updateMethodStack();
+  }
 
   // 7. Efeito Jelly nas letras do rodapé ao passar o mouse
   document.querySelectorAll('.footer-wordmark .jl').forEach(el => {
