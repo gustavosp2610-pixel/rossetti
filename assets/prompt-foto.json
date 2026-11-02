@@ -1,0 +1,54 @@
+{
+  "projeto": "Foto principal (hero) do site pessoal",
+  "referencia": "assets/foto-referencia.png",
+
+  "identidade": {
+    "instrucao": "Usar a pessoa da foto de referência. Manter exatamente o rosto, os traços, o sorriso, o tom de pele e o corte de cabelo. Não rejuvenescer, não envelhecer, não alterar o formato do rosto."
+  },
+
+  "composicao": {
+    "formato": "vertical, proporção 4:5",
+    "enquadramento": "plano americano (do meio da coxa para cima)",
+    "posicao": "pessoa levemente à esquerda do centro, corpo um pouco virado, rosto voltado para a câmera",
+    "pose": "postura confiante e relaxada, mão esquerda no bolso da calça, braço direito solto ao lado do corpo",
+    "olhar": "direto para a câmera, sorriso natural",
+    "espaco_livre": "deixar área livre à direita da pessoa"
+  },
+
+  "roupa": {
+    "paleto": "smoking preto, corte ajustado, lapela de cetim preto",
+    "camisa": "camisa social branca",
+    "acessorios": "gravata borboleta preta e um pequeno broche prateado na lapela, iguais aos da foto de referência"
+  },
+
+  "cenario": {
+    "fundo": "fundo escuro e liso de estúdio, com luzes pequenas e quentes bem desfocadas (bokeh), lembrando a cortina de luzes da foto original",
+    "remover": "plantas, vasos, cortina branca e piso de madeira"
+  },
+
+  "iluminacao": {
+    "principal": "luz de estúdio suave vindo da frente e da esquerda, iluminando bem o rosto",
+    "recorte": "luz de contorno suave atrás da pessoa, separando o smoking do fundo escuro",
+    "clima": "quente, elegante e profissional"
+  },
+
+  "paleta": {
+    "fundo": "preto e grafite",
+    "destaques": "dourado quente das luzes",
+    "observacao": "se o site usar outras cores de destaque, trocar o dourado por elas"
+  },
+
+  "estilo": {
+    "tipo": "fotografia realista de estúdio, aparência de retrato profissional",
+    "nitidez": "rosto e roupa nítidos, fundo desfocado",
+    "acabamento": "cores naturais, sem filtros exagerados"
+  },
+
+  "evitar": [
+    "mudar o rosto ou os traços da pessoa",
+    "aparência de desenho, ilustração ou 3D",
+    "texto ou logotipos na imagem",
+    "mãos ou dedos deformados",
+    "pele artificial ou lisa demais"
+  ]
+}
